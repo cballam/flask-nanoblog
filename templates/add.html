@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 id="pageTitle">
+  Add a Blog Post
+</h2>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+      <form name="addForm" id="addForm" method="POST" action="{{ url_for('add') }}" novalidate>
+          {{ form.hidden_tag() }}
+          {{ wtf.form_field(form.title) }}
+          {{ wtf.form_field(form.subtitle) }}
+          {{ wtf.form_field(form.content) }}
+          <button type="submit" class="btn btn-secondary" id="sendMessageButton">Send</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

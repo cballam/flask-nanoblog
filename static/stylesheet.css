@@ -1,0 +1,40 @@
+body {
+  margin-top: 50px;
+}
+
+.form-signin {
+  width: 500px;
+  margin-left: 40%;
+}
+
+.alert {
+   width: 60%;
+   text-align: center;
+   margin-left: 20%;
+}
+
+.buttons {
+  text-align: center;
+}
+
+#reply {
+  margin-left: inherit + 3%;
+}
+
+#deletePost {
+  margin-right: 39%;
+}
+
+#deleteModal {
+  text-align: center;
+}
+
+#pageTitle {
+  text-align: center;
+}
+
+#postContent {
+  width: 60%;
+  margin-left: 20%;
+  margin-top: 2%;
+}
