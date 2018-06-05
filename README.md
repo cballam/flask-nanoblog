@@ -5,4 +5,7 @@ To run, simply clone the repository, then navigate to the directory through the 
 
 pip3 install -r requirements.txt
 
-to install all dependencies. Then simply run the web app by running website.py and it will be avaiable on localhost:5000
+to install all dependencies. Then simply run the web app by running website.py and it will be available on localhost:5000
+
+The database comes with one user pre-added. The username is NewUser and its password is newpassword.
+Use this account to test adding, deleting, or updating posts.
