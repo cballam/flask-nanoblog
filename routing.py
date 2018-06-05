@@ -33,23 +33,23 @@ def about():
 @app.route('/post/<int:post_id>')
 def post(post_id):
     post = Blogpost.query.filter_by(id=post_id).one()
-    return render_template('post.html', post=post) 
+    return render_template('post.html', post=post)
 
 # Update individual post if author is logged in
 @app.route('/update/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def update(post_id):
-    udpateForm = UpdatePostForm()
+    updateForm = UpdatePostForm()
     post = Blogpost.query.filter_by(id=post_id).one()
     if (session.get('username') != post.author):
         flash('You are not authorized to do this', 'danger')
         return redirect(url_for('post', post_id = post_id))
 
-    if form.validate_on_submit():
-        post.content = form.content.data
+    if updateForm.validate_on_submit():
+        post.content = updateForm.content.data
         db.session.commit()
         return redirect(url_for('post', post_id = post_id))
-    form.content.data = post.content;
+    updateForm.content.data = post.content;
     return render_template('update.html', form=updateForm, post=post)
 
 # Delete post if the author is logged in
