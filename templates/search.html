@@ -6,7 +6,7 @@
   <div class="col"></div>
   <div class="col">
     <h2 id="pageTitle">
-      Blog Posts
+      Search Results
     </h2>
   </div>
 
@@ -25,19 +25,19 @@
 <div class="container" id="posts">
   <div class="row">
     <div class="col-lg-8 col-md-10 mx-auto">
-    {% for post in posts %}
+    {% for result in results %}
       <div class="post-preview">
-        <a href="{{ url_for('post', post_id=post.id) }}">
+        <a href="{{ url_for('post', post_id=result.id) }}">
           <h2 class="post-title">
-            {{ post.title }}
+            {{ result.title }}
           </h2>
           <h3 class="post-subtitle">
-            {{ post.subtitle }}
+            {{ result.subtitle }}
           </h3>
         </a>
         <p class="post-meta">Posted by
-          <a href="{{ url_for('profile', username = post.author) }}">{{ post.author }}</a>
-          on {{ post.date_posted.strftime('%B %d, %Y') }}</p>
+          <a href="{{ url_for('profile', username = result.author) }}">{{ result.author }}</a>
+          on {{ result.date_posted.strftime('%B %d, %Y') }}</p>
       </div>
       <hr>
       {% endfor %}

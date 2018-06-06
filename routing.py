@@ -1,7 +1,7 @@
 # Sets all of the routes for the app
 from website import app
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from forms import LoginForm, RegisterForm, AddPostForm, UpdatePostForm
+from forms import LoginForm, RegisterForm, AddPostForm, UpdatePostForm, SearchForm
 from dbModels import Blogpost, Users
 from datetime import datetime
 from website import db, cache
@@ -20,10 +20,13 @@ def login_required(f):
     return wrap
 
 @cache.cached(timeout=60)
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
+    form = SearchForm()
+    if form.validate_on_submit():
+        return redirect(url_for('search', query=form.search.data))
     posts = Blogpost.query.order_by(Blogpost.date_posted.desc()).all()
-    return render_template('index.html', posts=posts)
+    return render_template('index.html', posts=posts, form=form)
 
 @app.route('/about')
 def about():
@@ -129,3 +132,11 @@ def register():
 def profile(username):
     posts = Blogpost.query.filter_by(author=username).order_by(Blogpost.date_posted.desc()).all()
     return render_template('profile.html', posts=posts, username = username)
+
+# Searches the database for relevant content
+@app.route('/search/<query>', methods=['GET', 'POST'])
+def search(query):
+    form = SearchForm()
+    form.search.data = query
+    results = Blogpost.query.filter(Blogpost.title.like("%" + str(query) + "%")).order_by(Blogpost.date_posted.desc()).all()
+    return render_template('search.html', results=results, form=form)

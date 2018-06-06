@@ -23,3 +23,6 @@ class UpdatePostForm(FlaskForm):
 
 class ReplyForm(FlaskForm):
     content = TextAreaField('Content', validators=[InputRequired(), Length(min=10, max=10000)])
+
+class SearchForm(FlaskForm):
+    search = StringField('', validators=[InputRequired()])

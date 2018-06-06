@@ -17,6 +17,11 @@ body {
   text-align: center;
 }
 
+#search {
+  margin-left: 4%;
+  width: 30%;
+}
+
 #deletePost {
   margin-right: 39%;
 }
@@ -27,6 +32,10 @@ body {
 
 #pageTitle {
   text-align: center;
+}
+
+#posts {
+  margin-top: -3%;
 }
 
 #postContent {
