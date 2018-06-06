@@ -17,10 +17,6 @@ body {
   text-align: center;
 }
 
-#reply {
-  margin-left: inherit + 3%;
-}
-
 #deletePost {
   margin-right: 39%;
 }
