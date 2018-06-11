@@ -51,21 +51,35 @@
     </div>
   {% endif %}
 
-<hr>
+<br>
 
-<!-- Reply to post -->
-
-<!-- Replies -->
-<!-- {%- for reply in replies %}
-  <h4> <strong> Posted by: {{reply.author}} at {{reply.date_posted.strftime('%B %d, %Y')}} <strong> </h4>
-  <p> {{reply.content}} </p>
-
-  <hr>
-{%- endfor %} -->
+<form class="form-signin" method="POST" action="{{ url_for('post', post_id = post.id )}}">
+    <h2 class="form-signin-heading">Leave a comment:</h2>
+    {{ form.hidden_tag() }}
+    {{ wtf.form_field(form.content) }}
+    <br>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+</form>
 
 {% endif %}
 
+{% for comment in comments %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+      <div class="post-preview">
+        <h3 class="post-title">
+          <a href="{{ url_for('profile', username = comment.author) }}"><small>{{ comment.author }}</small></a>
+        </h3>
+        <h4 class="post-subtitle"><small>{{ comment.timeFormat() }}</small></h4>
+        <p class="post-meta"> {{ comment.content }} </p>
+      </div>
+      <hr>
+    </div>
+  </div>
+</div>
 
+{% endfor %}
 
 
 

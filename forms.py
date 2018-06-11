@@ -21,8 +21,8 @@ class AddPostForm(FlaskForm):
 class UpdatePostForm(FlaskForm):
     content = TextAreaField('Content', validators=[InputRequired(), Length(min=10, max=10000)])
 
-class ReplyForm(FlaskForm):
-    content = TextAreaField('Content', validators=[InputRequired(), Length(min=10, max=10000)])
+class CommentForm(FlaskForm):
+    content = TextAreaField('', validators=[InputRequired(), Length(min=10, max=10000)])
 
 class SearchForm(FlaskForm):
     search = StringField('', validators=[InputRequired()])

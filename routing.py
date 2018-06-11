@@ -1,8 +1,8 @@
 # Sets all of the routes for the app
 from website import app
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from forms import LoginForm, RegisterForm, AddPostForm, UpdatePostForm, SearchForm
-from dbModels import Blogpost, Users
+from forms import LoginForm, RegisterForm, AddPostForm, UpdatePostForm, SearchForm, CommentForm
+from dbModels import Blogpost, Users, Comments
 from datetime import datetime
 from website import db, cache
 from functools import wraps
@@ -33,10 +33,21 @@ def about():
     return render_template('about.html')
 
 # View individual post
-@app.route('/post/<int:post_id>')
+@app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def post(post_id):
+    form = CommentForm()
+
+    # Submit the comment if the form validates
+    if form.validate_on_submit():
+        comment = Comments(post = post_id, author = session.get('username'), \
+            date_posted = datetime.now(), content = form.content.data)
+        db.session.add(comment)
+        db.session.commit()
+        form.content.data = ""
+
     post = Blogpost.query.filter_by(id=post_id).one()
-    return render_template('post.html', post=post)
+    comments = Comments.query.filter_by(post=post_id)
+    return render_template('post.html', post=post, comments=comments, form=form)
 
 # Update individual post if author is logged in
 @app.route('/update/<int:post_id>', methods=['GET', 'POST'])
