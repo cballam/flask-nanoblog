@@ -75,7 +75,7 @@ def delete(post_id):
         db.session.delete(post)
         db.session.commit()
         flash('Deleted post', 'danger')
-        return redirect(url_for('index'))
+        return redirect(url_for('profile', username = session['username']))
     flash('Cannot delete post', 'danger')
     return redirect(url_for('post', post_id=post_id))
 
@@ -99,16 +99,16 @@ def add():
     form = AddPostForm()
     if form.validate_on_submit():
         title = form.title.data
-        subtitle = form.subtitle.data
+        topic = form.topic.data
         author = session['username']
         content = form.content.data
 
-        post = Blogpost(title=title, subtitle=subtitle, author=author, \
+        post = Blogpost(title=title, topic=topic, author=author, \
         content=content, date_posted=datetime.now())
 
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('index'))
+        return redirect(url_for('profile', username = session['username']))
     return render_template('add.html', form=form)
 
 # Logs a user in, sets a session variable
@@ -162,5 +162,15 @@ def profile(username):
 def search(query):
     form = SearchForm()
     form.search.data = query
-    results = Blogpost.query.filter(Blogpost.title.like("%" + str(query) + "%")).order_by(Blogpost.date_posted.desc()).all()
+
+    results = Blogpost.query.filter(Blogpost.title.like("%" + str(query) + "%")).\
+    order_by(Blogpost.date_posted.desc()).all()
+
     return render_template('search.html', results=results, form=form)
+
+# Shows posts with the defined topic
+@app.route('/t/<topic>')
+def topic(topic):
+    form = SearchForm()
+    posts = Blogpost.query.filter_by(topic=topic).order_by(Blogpost.date_posted.desc()).all()
+    return render_template('topic.html', posts=posts, topic=topic, form=form)

@@ -15,10 +15,11 @@
           <h2 class="post-title">
             {{ post.title }}
           </h2>
-          <h3 class="post-subtitle">
-            {{ post.subtitle }}
-          </h3>
         </a>
+        <h3 class="post-subtitle">
+          {{ post.topic }}
+        </h3>
+
         <p class="post-meta">Posted by
           <a href="{{ url_for('profile', username = post.author) }}">{{ post.author }}</a>
            on {{ post.date_posted.strftime('%B %d, %Y') }}</p>

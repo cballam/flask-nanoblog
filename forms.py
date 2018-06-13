@@ -15,7 +15,7 @@ class RegisterForm(FlaskForm):
 
 class AddPostForm(FlaskForm):
     title = StringField('Title', validators=[InputRequired(), Length(min=4, max=140)])
-    subtitle = StringField('Subtitle')
+    topic = StringField('Topic')
     content = TextAreaField('Content', validators=[InputRequired(), Length(min=10, max=10000)])
 
 class UpdatePostForm(FlaskForm):
