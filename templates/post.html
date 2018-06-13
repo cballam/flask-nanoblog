@@ -68,11 +68,16 @@
   <div class="row">
     <div class="col-lg-8 col-md-10 mx-auto">
       <div class="post-preview">
-        <h3 class="post-title">
+        <h4 class="post-title">
           <a href="{{ url_for('profile', username = comment.author) }}"><small>{{ comment.author }}</small></a>
-        </h3>
-        <h4 class="post-subtitle"><small>{{ comment.timeFormat() }}</small></h4>
+          <small><i>{{ comment.timeFormat() }}</i></small>
+        </h4>
         <p class="post-meta"> {{ comment.content }} </p>
+        {% if session.username == comment.author %}
+        <div class="post-footer">
+          <a href="{{ url_for('deleteComment', post_id = post.id, comment_id=comment.id) }}" class="btn btn-danger" id="deletePost">Delete</a>
+        </div>
+        {% endif %}
       </div>
       <hr>
     </div>

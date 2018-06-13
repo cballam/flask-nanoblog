@@ -1,5 +1,5 @@
 # Sets all of the routes for the app
-from website import app
+from website import app, cache
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from forms import LoginForm, RegisterForm, AddPostForm, UpdatePostForm, SearchForm, CommentForm
 from dbModels import Blogpost, Users, Comments
@@ -19,8 +19,8 @@ def login_required(f):
             return redirect(url_for('login'))
     return wrap
 
-@cache.cached(timeout=60)
 @app.route('/', methods=['GET', 'POST'])
+@cache.cached(timeout=15)
 def index():
     form = SearchForm()
     if form.validate_on_submit():
@@ -78,6 +78,19 @@ def delete(post_id):
         return redirect(url_for('index'))
     flash('Cannot delete post', 'danger')
     return redirect(url_for('post', post_id=post_id))
+
+# Delete comment if author is logged in
+@app.route('/deleteComment/<int:post_id>/<int:comment_id>')
+@login_required
+def deleteComment(post_id, comment_id):
+    comment = Comments.query.filter_by(id=comment_id).one()
+    if comment.author == session['username']:
+        db.session.delete(comment)
+        db.session.commit()
+        flash('Deleted comment', 'danger')
+        return redirect(url_for('post', post_id=post_id))
+    flash('Cannot delete post', 'danger')
+    return redirect(url_for('index'))
 
 # Adds a post
 @app.route('/add', methods = ['GET', 'POST'])
