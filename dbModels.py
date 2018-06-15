@@ -14,6 +14,9 @@ class Blogpost(db.Model):
     date_posted = db.Column(db.DateTime)
     content = db.Column(db.Text)
 
+    def getComments(self):
+        return Comments.query.filter_by(post = self.id).order_by(Comments.date_posted.desc()).all()
+
 # Typical user has only a username and password.
 # Possibly add email verification and support later
 class Users(db.Model):
@@ -24,6 +27,7 @@ class Users(db.Model):
 class Comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post = db.Column(db.Integer)
+    parent = db.Column(db.Integer)
     author = db.Column(db.String(20))
     date_posted = db.Column(db.DateTime)
     content = db.Column(db.Text)
@@ -59,6 +63,10 @@ class Comments(db.Model):
                 return f"{int(days/30)} months ago"
 
         return f"{days/365} years ago"
+
+    def getComments(self):
+        return Comments.query.filter_by(parent = self.id)\
+        .order_by(Comment.date_posted.desc()).all()
 
 # Topics each have a name and short description
 class Topics(db.Model):

@@ -46,7 +46,7 @@ def post(post_id):
         form.content.data = ""
 
     post = Blogpost.query.filter_by(id=post_id).one()
-    comments = Comments.query.filter_by(post=post_id)
+    comments = post.getComments()
     return render_template('post.html', post=post, comments=comments, form=form)
 
 # Update individual post if author is logged in
