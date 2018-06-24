@@ -19,14 +19,17 @@ def login_required(f):
             return redirect(url_for('login'))
     return wrap
 
+# Helper function, returns all the posts in the db
+@cache.cached(timeout=20)
+def allPosts():
+    return Blogpost.query.order_by(Blogpost.date_posted.desc()).all()
+
 @app.route('/', methods=['GET', 'POST'])
-@cache.cached(timeout=15)
 def index():
     form = SearchForm()
     if form.validate_on_submit():
         return redirect(url_for('search', query=form.search.data))
-    posts = Blogpost.query.order_by(Blogpost.date_posted.desc()).all()
-    return render_template('index.html', posts=posts, form=form)
+    return render_template('index.html', posts=allPosts(), form=form)
 
 @app.route('/about')
 def about():
@@ -38,16 +41,12 @@ def post(post_id):
     form = CommentForm()
     replyForm = CommentForm()
 
-    # Submit the comment if the form validates
+    # first check the replies
     if form.validate_on_submit():
-        comment = Comments(post = post_id, author = session.get('username'), parent = -1, \
-            date_posted = datetime.now(), content = form.content.data)
-        db.session.add(comment)
-        db.session.commit()
-        form.content.data = ""
-
-    if replyForm.validate_on_submit():
-        comment = Comments(post=post_id, author = session.get('username'), parent = request.args.get('parent'), \
+        parent = request.args.get('parent')
+        comment = Comments(post=post_id, author = session.get('username'), \
+            # Test which defaults to -1 with no parent value in url
+            parent = -1 if parent is None else parent, \
             date_posted = datetime.now(), content = replyForm.content.data)
         db.session.add(comment)
         db.session.commit()
@@ -55,9 +54,19 @@ def post(post_id):
 
         return redirect(url_for('post', post_id=post_id))
 
+    # # Submit the comment if the form validates
+    # elif form.validate_on_submit():
+    #     comment = Comments(post = post_id, author = session.get('username'), parent = -1, \
+    #         date_posted = datetime.now(), content = form.content.data)
+    #     db.session.add(comment)
+    #     db.session.commit()
+    #     form.content.data = ""
+
+
+
     post = Blogpost.query.filter_by(id=post_id).one()
     comments = post.getComments()
-    return render_template('post.html', post=post, comments=comments, form=form, replyForm=replyForm)
+    return render_template('post.html', post=post, comments=comments, form=form, replyForm=form)
 
 # Update individual post if author is logged in
 @app.route('/update/<int:post_id>', methods=['GET', 'POST'])
@@ -179,7 +188,7 @@ def search(query):
     return render_template('search.html', results=results, form=form)
 
 # Shows posts with the defined topic
-@app.route('/t/<topic>')
+@app.route('/topic/<topic>')
 def topic(topic):
     form = SearchForm()
     posts = Blogpost.query.filter_by(topic=topic).order_by(Blogpost.date_posted.desc()).all()
