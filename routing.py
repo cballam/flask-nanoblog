@@ -36,18 +36,28 @@ def about():
 @app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def post(post_id):
     form = CommentForm()
+    replyForm = CommentForm()
 
     # Submit the comment if the form validates
     if form.validate_on_submit():
-        comment = Comments(post = post_id, author = session.get('username'), \
+        comment = Comments(post = post_id, author = session.get('username'), parent = -1, \
             date_posted = datetime.now(), content = form.content.data)
         db.session.add(comment)
         db.session.commit()
         form.content.data = ""
 
+    if replyForm.validate_on_submit():
+        comment = Comments(post=post_id, author = session.get('username'), parent = request.args.get('parent'), \
+            date_posted = datetime.now(), content = replyForm.content.data)
+        db.session.add(comment)
+        db.session.commit()
+        replyForm.content.data = ""
+
+        return redirect(url_for('post', post_id=post_id))
+
     post = Blogpost.query.filter_by(id=post_id).one()
     comments = post.getComments()
-    return render_template('post.html', post=post, comments=comments, form=form)
+    return render_template('post.html', post=post, comments=comments, form=form, replyForm=replyForm)
 
 # Update individual post if author is logged in
 @app.route('/update/<int:post_id>', methods=['GET', 'POST'])

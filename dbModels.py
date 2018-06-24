@@ -15,7 +15,7 @@ class Blogpost(db.Model):
     content = db.Column(db.Text)
 
     def getComments(self):
-        return Comments.query.filter_by(post = self.id).order_by(Comments.date_posted.desc()).all()
+        return Comments.query.filter_by(post = self.id).filter_by(parent=-1).order_by(Comments.date_posted.desc()).all()
 
 # Typical user has only a username and password.
 # Possibly add email verification and support later
@@ -66,7 +66,7 @@ class Comments(db.Model):
 
     def getComments(self):
         return Comments.query.filter_by(parent = self.id)\
-        .order_by(Comment.date_posted.desc()).all()
+        .order_by(Comments.date_posted.desc()).all()
 
 # Topics each have a name and short description
 class Topics(db.Model):

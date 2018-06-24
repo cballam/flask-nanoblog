@@ -17,6 +17,10 @@ body {
   text-align: center;
 }
 
+.reply {
+  margin-left: inherit + 10px;
+}
+
 #search {
   margin-left: 4%;
   width: 30%;
