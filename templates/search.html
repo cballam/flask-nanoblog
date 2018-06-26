@@ -6,7 +6,9 @@
   <div class="col"></div>
   <div class="col">
     <h2 id="pageTitle">
-      Search Results
+      Search Results {% if topic %}
+      for topic: {{ topic }}
+      {% endif %}
     </h2>
   </div>
 
@@ -32,7 +34,7 @@
             {{ result.title }}
           </h2>
           <h3 class="post-subtitle">
-            {{ result.subtitle }}
+            <a href="{{ url_for('topic', topic = result.topic) }}"><strong>{{ result.topic }}</strong></a>
           </h3>
         </a>
         <p class="post-meta">Posted by

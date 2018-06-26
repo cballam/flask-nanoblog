@@ -167,18 +167,34 @@ def profile(username):
 
 # Searches the database for relevant content
 @app.route('/search/<query>', methods=['GET', 'POST'])
-def search(query):
+def search(query, topic=None):
     form = SearchForm()
+    if form.validate_on_submit():
+        return redirect(url_for('search', query=form.content.data))
     form.search.data = query
-
     results = Blogpost.query.filter(Blogpost.title.like("%" + str(query) + "%")).\
     order_by(Blogpost.date_posted.desc()).all()
+    return render_template('search.html', results=results, form=form, topic=topic)
 
-    return render_template('search.html', results=results, form=form)
 
 # Shows posts with the defined topic
-@app.route('/topic/<topic>')
+@app.route('/topic/<topic>', methods=['GET', 'POST'])
 def topic(topic):
     form = SearchForm()
+    if form.validate_on_submit():
+        print("Topic to search: " + topic)
+        return redirect(url_for('searchTopic', query = form.search.data, topic = topic))
     posts = Blogpost.query.filter_by(topic=topic).order_by(Blogpost.date_posted.desc()).all()
     return render_template('topic.html', posts=posts, topic=topic, form=form)
+
+# Search the specific topic
+@app.route('/topic/<topic>/<query>', methods=['GET', 'POST'])
+def searchTopic(topic, query):
+    form = SearchForm()
+
+
+    results = Blogpost.query.filter(Blogpost.title.like("%" + str(query) + "%")).\
+        filter(Blogpost.topic.like(str(topic))).\
+        order_by(Blogpost.date_posted.desc()).all()
+
+    return render_template('search.html', results=results, form=form, topic=topic)

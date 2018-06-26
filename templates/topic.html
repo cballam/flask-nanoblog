@@ -12,7 +12,7 @@
 
   <div class="col">
     <div class="search">
-      <form method="POST" action="{{ url_for('index') }}">
+      <form method="POST" action="{{ url_for('topic', topic = topic) }}">
         {{ form.hidden_tag() }}
         {{ wtf.form_field(form.search) }}
         <button type="submit" class="btn btn-sm" id="search">Search</button>
