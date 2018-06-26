@@ -21,6 +21,10 @@ body {
   margin-left: inherit + 10px;
 }
 
+.replyForm {
+  display: none;
+}
+
 #search {
   margin-left: 4%;
   width: 30%;

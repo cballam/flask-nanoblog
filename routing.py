@@ -39,7 +39,6 @@ def about():
 @app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def post(post_id):
     form = CommentForm()
-    replyForm = CommentForm()
 
     # first check the replies
     if form.validate_on_submit():
@@ -47,22 +46,12 @@ def post(post_id):
         comment = Comments(post=post_id, author = session.get('username'), \
             # Test which defaults to -1 with no parent value in url
             parent = -1 if parent is None else parent, \
-            date_posted = datetime.now(), content = replyForm.content.data)
+            date_posted = datetime.now(), content = form.content.data)
         db.session.add(comment)
         db.session.commit()
-        replyForm.content.data = ""
+        form.content.data = ""
 
         return redirect(url_for('post', post_id=post_id))
-
-    # # Submit the comment if the form validates
-    # elif form.validate_on_submit():
-    #     comment = Comments(post = post_id, author = session.get('username'), parent = -1, \
-    #         date_posted = datetime.now(), content = form.content.data)
-    #     db.session.add(comment)
-    #     db.session.commit()
-    #     form.content.data = ""
-
-
 
     post = Blogpost.query.filter_by(id=post_id).one()
     comments = post.getComments()
