@@ -9,7 +9,7 @@
 </h2>
 
 <h4 id="pageTitle" class="text-muted">
-  <strong> {{ post.topic }} </strong>
+  <a href="{{ url_for('topic', topic = post.topic) }}"><strong> {{ post.topic }} </strong></a>
   <br>
   <small> Posted by:
     <a href="{{ url_for('profile', username = post.author) }}">{{ post.author }}</a>

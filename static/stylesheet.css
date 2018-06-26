@@ -18,7 +18,7 @@ body {
 }
 
 .reply {
-  margin-left: inherit + 10px;
+  margin-left: inherit;
 }
 
 .replyForm {

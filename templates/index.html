@@ -33,7 +33,7 @@
           </h2>
         </a>
         <h3 class="post-subtitle">
-          {{ post.topic }}
+          <a href="{{ url_for('topic', topic = post.topic) }}"><strong> {{ post.topic }} </strong></a>
         </h3>
 
         <p class="post-meta">Posted by
