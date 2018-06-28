@@ -1,10 +1,9 @@
 # Sets all of the routes for the app
-from website import app, cache
+from website import app, cache, db
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from forms import LoginForm, RegisterForm, AddPostForm, UpdatePostForm, SearchForm, CommentForm
 from dbModels import Blogpost, Users, Comments
 from datetime import datetime
-from website import db, cache
 from functools import wraps
 from werkzeug import generate_password_hash, check_password_hash
 

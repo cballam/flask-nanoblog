@@ -68,7 +68,29 @@ class Comments(db.Model):
         return Comments.query.filter_by(parent = self.id)\
         .order_by(Comments.date_posted.desc()).all()
 
+    def getPoints(self):
+        points = db.session.query(Points.score).\
+        filter_by(post_id = self.id).all()
+        if not points:
+            return 0
+        points = points[0]
+        return sum(points)
+
 # Topics each have a name and short description
 class Topics(db.Model):
     name = db.Column(db.String(30), primary_key=True)
     description = db.Column(db.String(200))
+
+class Points(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    user = db.Column(db.String(20))
+    post_id = db.Column(db.Integer)
+    score = db.Column(db.Integer) # -1, 0, 1
+
+    # Updates the score of the object, doesn't allow multiple "upvotes"
+    def updateScore(self, score):
+        if int(self.score) == int(score):
+            self.score = 0
+        else:
+            self.score = score
+        db.session.commit()

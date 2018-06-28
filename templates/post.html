@@ -72,6 +72,9 @@
     {% for comment in post.getComments() recursive %}
           <div class="reply" style="margin-left: {{ (loop.depth-1) * 50 }}px">
             <h4 class="post-title">
+              {{ comment.getPoints() }}
+              <button class="btn btn-sm" onclick='newScore(1, {{ comment.id }})'>UP</button>
+              <button class="btn btn-sm" onclick='newScore(-1, {{ comment.id }})'>DOWN</button>
               <a href="{{ url_for('profile', username = comment.author) }}"><small>{{ comment.author }}</small></a>
               <small><i>{{ comment.timeFormat() }}</i></small>
             </h4>

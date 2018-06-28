@@ -10,6 +10,7 @@ db = SQLAlchemy(app)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 from routing import *
+from api import *
 
 if __name__ == '__main__':
     app.run()
