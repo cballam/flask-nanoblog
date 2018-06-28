@@ -26,8 +26,10 @@
 </div>
 
 {% if session['username'] %}
-  {% if session['username'] == post.author %}
     <div class="buttons">
+      <a class="btn btn-success" onclick="collapseItem(comment)">Comment</a>
+  {% if session['username'] == post.author %}
+
       <a href="{{ url_for('update', post_id = post.id) }}" class="btn btn-warning" id="updatePost" role="button">Update Post</a>
       <a class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete Post</a>
     </div>
@@ -54,8 +56,7 @@
   {% endif %}
 
 <br>
-
-<form class="form-signin" method="POST" action="{{ url_for('post', post_id = post.id )}}">
+<form id="comment" class="form-comment" method="POST" action="{{ url_for('post', post_id = post.id )}}">
     <h2 class="form-signin-heading">Leave a comment:</h2>
     {{ form.hidden_tag() }}
     {{ wtf.form_field(form.content) }}
@@ -65,48 +66,48 @@
 
 {% endif %}
 
-{% for comment in post.getComments() recursive %}
 <div class="container">
   <div class="row">
     <div class="col-lg-8 col-md-10 mx-auto">
-      <div class="reply">
-        <h4 class="post-title">
-          <a href="{{ url_for('profile', username = comment.author) }}"><small>{{ comment.author }}</small></a>
-          <small><i>{{ comment.timeFormat() }}</i></small>
-        </h4>
-        <p class="post-meta"> {{ comment.content }} </p>
+    {% for comment in post.getComments() recursive %}
+          <div class="reply" style="margin-left: {{ (loop.depth-1) * 50 }}px">
+            <h4 class="post-title">
+              <a href="{{ url_for('profile', username = comment.author) }}"><small>{{ comment.author }}</small></a>
+              <small><i>{{ comment.timeFormat() }}</i></small>
+            </h4>
+            <p class="post-meta"> {{ comment.content }} </p>
 
-        {% if session.username %}
-        <div class="post-footer">
+            {% if session.username %}
+            <div class="post-footer">
 
-          <button class="btn btn-success" onclick='collapseItem("#{{ comment.id }}")'>Reply</button>
+              <button class="btn btn-success" onclick='collapseItem("#{{ comment.id }}")'>Reply</button>
 
-          {% if session.username == comment.author %}
-          <a href="{{ url_for('deleteComment', post_id = post.id, comment_id=comment.id) }}" class="btn btn-danger" id="deletePost">Delete</a>
+              {% if session.username == comment.author %}
+              <a href="{{ url_for('deleteComment', post_id = post.id, comment_id=comment.id) }}" class="btn btn-danger" id="deletePost">Delete</a>
+              {% endif %}
+
+            </div>
+            {% endif %}
+
+            <!-- Comment reply form -->
+            <div class="replyForm"id="{{ comment.id }}">
+              <form class="form-reply" method="POST" action="{{ url_for('post', post_id = comment.post, parent = comment.id )}}">
+                  {{ form.hidden_tag() }}
+                  {{ wtf.form_field(replyForm.content) }}
+                  <br>
+                  <button class="btn btn-lg btn-primary btn-block" type="submit">Reply</button>
+              </form>
+            </div>
+          </div>
+          <hr>
+          {% if comment.getComments() %}
+            {{ loop(comment.getComments()) }}
           {% endif %}
 
-        </div>
-        {% endif %}
-
-        <!-- Comment reply form -->
-        <div class="replyForm"id="{{ comment.id }}">
-          <form class="form-signin" method="POST" action="{{ url_for('post', post_id = comment.post, parent = comment.id )}}">
-              {{ form.hidden_tag() }}
-              {{ wtf.form_field(replyForm.content) }}
-              <br>
-              <button class="btn btn-lg btn-primary btn-block" type="submit">Reply</button>
-          </form>
-        </div>
-      </div>
-      <hr>
-      {% if comment.getComments() %}
-        {{ loop(comment.getComments()) }}
-      {% endif %}
+    {% endfor %}
     </div>
   </div>
 </div>
-
-{% endfor %}
 
 
 

@@ -182,7 +182,6 @@ def search(query, topic=None):
 def topic(topic):
     form = SearchForm()
     if form.validate_on_submit():
-        print("Topic to search: " + topic)
         return redirect(url_for('searchTopic', query = form.search.data, topic = topic))
     posts = Blogpost.query.filter_by(topic=topic).order_by(Blogpost.date_posted.desc()).all()
     return render_template('topic.html', posts=posts, topic=topic, form=form)

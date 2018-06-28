@@ -7,6 +7,16 @@ body {
   margin-left: 40%;
 }
 
+.form-comment {
+  width: auto;
+  margin-left: 30%;
+  margin-right: 30%;
+}
+
+.form-reply {
+  min-width: 300px;
+}
+
 .alert {
    width: 60%;
    text-align: center;
@@ -21,13 +31,17 @@ body {
   margin-left: inherit;
 }
 
-.replyForm {
+.replyForm, #comment {
   display: none;
 }
 
 #search {
   margin-left: 4%;
   width: 30%;
+}
+
+#comment {
+  align-items: center;
 }
 
 #deletePost {

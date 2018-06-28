@@ -16,12 +16,12 @@ This repo utilizes:
 - User registration/login (with relatively secure password hashing)
 - Individual profile pages
 - Posting, updating and deleting of posts
-- Post title searching 
+- Post title searching
 - Threaded comments on posts
+- Topic pages similar to Reddit's subreddit system
 
 ## In progress:
 
-- Topic pages similar to Reddit's subreddit system
 - Front-end changes to the comments to make things less ugly
 - More useful search feature
 
