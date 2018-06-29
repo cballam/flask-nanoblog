@@ -68,13 +68,14 @@ class Comments(db.Model):
         return Comments.query.filter_by(parent = self.id)\
         .order_by(Comments.date_posted.desc()).all()
 
+    # returns total score of the comment
     def getPoints(self):
         points = db.session.query(Points.score).\
         filter_by(post_id = self.id).all()
         if not points:
             return 0
-        points = points[0]
-        return sum(points)
+        points = sum(item[0] for item in points)
+        return points
 
 # Topics each have a name and short description
 class Topics(db.Model):

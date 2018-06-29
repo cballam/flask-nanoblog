@@ -32,7 +32,10 @@
 
       <a href="{{ url_for('update', post_id = post.id) }}" class="btn btn-warning" id="updatePost" role="button">Update Post</a>
       <a class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete Post</a>
+  {% endif %}
+
     </div>
+  {% if session['username'] == post.author %}
 
     <!-- Based off of example from https://getbootstrap.com/docs/4.0/components/modal/ -->
     <div id = "deleteModal" class="modal fade" tabindex="-1" role="dialog">
@@ -73,8 +76,8 @@
           <div class="reply" style="margin-left: {{ (loop.depth-1) * 50 }}px">
             <h4 class="post-title">
               {{ comment.getPoints() }}
-              <button class="btn btn-sm" onclick='newScore(1, {{ comment.id }})'>UP</button>
-              <button class="btn btn-sm" onclick='newScore(-1, {{ comment.id }})'>DOWN</button>
+              <button class="btn btn-sm" id="{{comment.id}}up" onclick='newScore(1, {{ comment.id }})'>UP</button>
+              <button class="btn btn-sm" id="{{comment.id}}down" onclick='newScore(-1, {{ comment.id }})'>DOWN</button>
               <a href="{{ url_for('profile', username = comment.author) }}"><small>{{ comment.author }}</small></a>
               <small><i>{{ comment.timeFormat() }}</i></small>
             </h4>

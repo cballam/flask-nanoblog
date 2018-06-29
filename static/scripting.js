@@ -11,13 +11,30 @@ function newScore(score, id){
     score: score,
     post_id: id
   };
-  console.log(object);
   $.ajax({
         url: "../api/points",
         type: "post",
         data: object,
         success: function (response) {
-           console.log("Successfully sent data")
+          // toggle the button color
+           if (score == 1){
+             if ($("#" + id + "up").css('background-color') == 'rgb(0, 128, 0)'){
+               $("#" + id + "up").css('background-color', "lightgray");
+             }
+             else {
+               $("#" + id + "up").css('background-color', "green");
+             }
+             $("#" + id + "down").css('background-color', "lightgray");
+           }
+           else if (score == -1){
+             if ($("#" + id + "down").css('background-color') == 'rgb(255, 0, 0)'){
+               $("#" + id + "down").css('background-color', "lightgray");
+             }
+             else {
+               $("#" + id + "down").css('background-color', 'red');
+             }
+             $("#" + id + "up").css('background-color', "lightgray");
+           }
         }
     });
 };
