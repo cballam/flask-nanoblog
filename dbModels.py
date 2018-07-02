@@ -17,6 +17,33 @@ class Blogpost(db.Model):
     def getComments(self):
         return Comments.query.filter_by(post = self.id).filter_by(parent=-1).order_by(Comments.date_posted.desc()).all()
 
+    def getPoints(self):
+        points = db.session.query(Points.score).\
+        filter_by(post_id = self.id).all()
+        if not points:
+            return 0
+        points = sum(item[0] for item in points)
+        return points
+
+    # returns the color of the button
+    def voteUp(self, user):
+        score = Points.query.filter_by(post_id = self.id).filter_by(user = user).first()
+        if not score:
+            return "lightgray"
+        elif score.score == 1:
+            return "green"
+        else:
+            return "lightgray"
+
+    def voteDown(self, user):
+        score = Points.query.filter_by(post_id = self.id).filter_by(user = user).first()
+        if not score:
+            return "lightgray"
+        elif score.score == -1:
+            return "red"
+        else:
+            return "lightgray"
+
 # Typical user has only a username and password.
 # Possibly add email verification and support later
 class Users(db.Model):
@@ -71,7 +98,7 @@ class Comments(db.Model):
     # returns total score of the comment
     def getPoints(self):
         points = db.session.query(Points.score).\
-        filter_by(post_id = self.id).all()
+        filter_by(comment_id = self.id).all()
         if not points:
             return 0
         points = sum(item[0] for item in points)
@@ -85,6 +112,7 @@ class Topics(db.Model):
 class Points(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user = db.Column(db.String(20))
+    comment_id = db.Column(db.Integer)
     post_id = db.Column(db.Integer)
     score = db.Column(db.Integer) # -1, 0, 1
 

@@ -9,6 +9,13 @@
 </h2>
 
 <h4 id="pageTitle" class="text-muted">
+  {{post.getPoints()}}
+  {% if session['username'] %}
+  <button class="btn btn-sm" id="{{post.id}}upPOST" style="background-color: {{ post.voteUp(session['username'])}}"
+    onclick='newScore(1, null, {{post.id}})'>UP</button>
+  <button class="btn btn-sm" id="{{post.id}}downPOST" style="background-color: {{ post.voteDown(session['username'])}}"
+    onclick='newScore(-1, null, {{post.id}})'>DOWN</button>
+  {% endif %}
   <a href="{{ url_for('topic', topic = post.topic) }}"><strong> {{ post.topic }} </strong></a>
   <br>
   <small> Posted by:
@@ -76,8 +83,8 @@
           <div class="reply" style="margin-left: {{ (loop.depth-1) * 50 }}px">
             <h4 class="post-title">
               {{ comment.getPoints() }}
-              <button class="btn btn-sm" id="{{comment.id}}up" onclick='newScore(1, {{ comment.id }})'>UP</button>
-              <button class="btn btn-sm" id="{{comment.id}}down" onclick='newScore(-1, {{ comment.id }})'>DOWN</button>
+              <button class="btn btn-sm" id="{{comment.id}}up" onclick='newScore(1, {{ comment.id }}, null)'>UP</button>
+              <button class="btn btn-sm" id="{{comment.id}}down" onclick='newScore(-1, {{ comment.id }}, null)'>DOWN</button>
               <a href="{{ url_for('profile', username = comment.author) }}"><small>{{ comment.author }}</small></a>
               <small><i>{{ comment.timeFormat() }}</i></small>
             </h4>
