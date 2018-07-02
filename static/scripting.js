@@ -12,8 +12,13 @@ function newScore(score, comment_id, post_id){
     comment_id: comment_id,
     post_id: post_id
   };
+  // Default to comment url
+  let url = '../api/comments';
+  if (object.comment_id === null){
+    url = '../api/posts';
+  }
   $.ajax({
-        url: "../api/points",
+        url: url,
         type: "post",
         data: object,
         success: function (response) {
@@ -26,24 +31,28 @@ function newScore(score, comment_id, post_id){
             type = [post_id ,"upPOST", "downPOST"]
           }
           // Button color toggling logic
-           if (score == 1){
-             if ($("#" + type[0] + type[1]).css('background-color') == 'rgb(0, 128, 0)'){
-               $("#" +type[0]+ type[1]).css('background-color', "lightgray");
-             }
-             else {
-               $("#" +type[0]+ type[1]).css('background-color', "green");
-             }
-             $("#" +type[0]+ type[2]).css('background-color', "lightgray");
-           }
-           else if (score == -1){
-             if ($("#" +type[0]+ type[2]).css('background-color') == 'rgb(255, 0, 0)'){
-               $("#" +type[0]+ type[2]).css('background-color', "lightgray");
-             }
-             else {
-               $("#" +type[0]+ type[2]).css('background-color', 'red');
-             }
-             $("#" +type[0]+ type[1]).css('background-color', "lightgray");
-           }
+          toggleColor(type, score);
         }
     });
 };
+
+function toggleColor(type, score){
+   if (score == 1){
+     if ($("#" + type[0] + type[1]).css('background-color') == 'rgb(0, 128, 0)'){
+       $("#" +type[0]+ type[1]).css('background-color', "lightgray");
+     }
+     else {
+       $("#" +type[0]+ type[1]).css('background-color', "green");
+     }
+     $("#" +type[0]+ type[2]).css('background-color', "lightgray");
+   }
+   else if (score == -1){
+     if ($("#" +type[0]+ type[2]).css('background-color') == 'rgb(255, 0, 0)'){
+       $("#" +type[0]+ type[2]).css('background-color', "lightgray");
+     }
+     else {
+       $("#" +type[0]+ type[2]).css('background-color', 'red');
+     }
+     $("#" +type[0]+ type[1]).css('background-color', "lightgray");
+   }
+}
