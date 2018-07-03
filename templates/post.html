@@ -9,11 +9,11 @@
 </h2>
 
 <h4 id="pageTitle" class="text-muted">
-  {{post.getPoints()}}
+  <div class = "points" id="post{{ post.id }}points"> {{post.getPoints()}} </div>
   {% if session['username'] %}
-  <button class="btn btn-sm" id="{{post.id}}upPOST" style="background-color: {{ post.voteUp(session['username'])}}"
+  <button class="btn btn-sm" id="{{post.id}}upPOST" style="background-color: {{ post.upColor(session['username'])}}"
     onclick='newScore(1, null, {{post.id}})'>UP</button>
-  <button class="btn btn-sm" id="{{post.id}}downPOST" style="background-color: {{ post.voteDown(session['username'])}}"
+  <button class="btn btn-sm" id="{{post.id}}downPOST" style="background-color: {{ post.downColor(session['username'])}}"
     onclick='newScore(-1, null, {{post.id}})'>DOWN</button>
   {% endif %}
   <a href="{{ url_for('topic', topic = post.topic) }}"><strong> {{ post.topic }} </strong></a>
@@ -82,9 +82,11 @@
     {% for comment in post.getComments() recursive %}
           <div class="reply" style="margin-left: {{ (loop.depth-1) * 50 }}px">
             <h4 class="post-title">
-              {{ comment.getPoints() }}
-              <button class="btn btn-sm" id="{{comment.id}}up" onclick='newScore(1, {{ comment.id }}, null)'>UP</button>
-              <button class="btn btn-sm" id="{{comment.id}}down" onclick='newScore(-1, {{ comment.id }}, null)'>DOWN</button>
+              <div class = "points" id = "comment{{comment.id}}points">{{ comment.getPoints() }}</div>
+              <button class="btn btn-sm" id="{{comment.id}}up" onclick='newScore(1, {{ comment.id }}, null)'
+                style="background-color: {{ comment.upColor(session['username'])}}">UP</button>
+              <button class="btn btn-sm" id="{{comment.id}}down" onclick='newScore(-1, {{ comment.id }}, null)'
+                style="background-color: {{ comment.downColor(session['username'])}}">DOWN</button>
               <a href="{{ url_for('profile', username = comment.author) }}"><small>{{ comment.author }}</small></a>
               <small><i>{{ comment.timeFormat() }}</i></small>
             </h4>

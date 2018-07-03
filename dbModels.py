@@ -25,24 +25,24 @@ class Blogpost(db.Model):
         points = sum(item[0] for item in points)
         return points
 
-    # returns the color of the button
-    def voteUp(self, user):
+    # Used to find the button color (check if user has voted up)
+    def upColor(self, user):
         score = Points.query.filter_by(post_id = self.id).filter_by(user = user).first()
-        if not score:
+        if (not score) or (score.score == 0 or score.score == -1):
             return "lightgray"
-        elif score.score == 1:
+        else:
             return "green"
-        else:
-            return "lightgray"
+        # default
+        return "lightgray"
 
-    def voteDown(self, user):
+    def downColor(self, user):
         score = Points.query.filter_by(post_id = self.id).filter_by(user = user).first()
-        if not score:
+        if (not score) or score.score == 0 or score.score == 1:
             return "lightgray"
-        elif score.score == -1:
-            return "red"
         else:
-            return "lightgray"
+            return "red"
+        return "lightgray"
+
 
 # Typical user has only a username and password.
 # Possibly add email verification and support later
@@ -103,6 +103,24 @@ class Comments(db.Model):
             return 0
         points = sum(item[0] for item in points)
         return points
+
+    # Used to find the button color (check if user has voted up)
+    def upColor(self, user):
+        score = Points.query.filter_by(comment_id = self.id).filter_by(user = user).first()
+        if not score or score.score == 0 or score.score == -1:
+            return "lightgray"
+        else:
+            return "green"
+        # default
+        return "lightgray"
+
+    def downColor(self, user):
+        score = Points.query.filter_by(comment_id = self.id).filter_by(user = user).first()
+        if not score or score.score == 0 or score.score == 1:
+            return "lightgray"
+        else:
+            return "red"
+        return "lightgray"
 
 # Topics each have a name and short description
 class Topics(db.Model):

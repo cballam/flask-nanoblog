@@ -35,6 +35,10 @@ body {
   display: none;
 }
 
+.points {
+  display: inline;
+}
+
 #search {
   margin-left: 4%;
   width: 30%;

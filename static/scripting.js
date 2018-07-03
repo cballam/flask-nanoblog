@@ -22,16 +22,19 @@ function newScore(score, comment_id, post_id){
         type: "post",
         data: object,
         success: function (response) {
-          // Create type object to hold values needed to change button color
-          let type = null;
+          // Create typeCol object to hold values needed to change button color
+          let typeCol = null;
           if (object.comment_id !== null) {
-            type = [comment_id, "up", "down"]
+            typeCol = [comment_id, "up", "down"];
+            type = ["comment", comment_id];
           }
           else {
-            type = [post_id ,"upPOST", "downPOST"]
+            typeCol = [post_id ,"upPOST", "downPOST"];
+            type = ["post", post_id];
           }
           // Button color toggling logic
-          toggleColor(type, score);
+          toggleColor(typeCol, score);
+          updateScore(type, response);
         }
     });
 };
@@ -55,4 +58,10 @@ function toggleColor(type, score){
      }
      $("#" +type[0]+ type[1]).css('background-color', "lightgray");
    }
+};
+
+function updateScore(type, response){
+  console.log(type);
+  console.log(response.score);
+  $("#" + type[0] + type[1] + "points").text(response.score);
 }
