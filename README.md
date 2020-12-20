@@ -1,3 +1,7 @@
+# Archived
+
+This has not been worked on for 18 months, and I have no plans to update the project.
+
 # flask-nanoblog
 
 flask-nanoblog is a relatively simplistic blogging/social media platform which provides CRUD functionality. It has taken inspiration from various tutorials and websites, most notably "flask_reddit" [linked here](https://github.com/codelucas/flask_reddit) as well as reddit itself (and related social media websites)
